@@ -1,14 +1,16 @@
 import React from 'react';
 import Friend from './Friend';
 
-const Friends = props => {
+
+
+const FriendsList = props => {
     return (
         <div className="friend-area">
           {props.friends.map(friend => (
-            <Friend friend={friend} name={friend.name} key={friend.id}/>
+            <Friend friend={friend} name={friend.name} deleteFriend={props.deleteFriend} />
           ))}
         </div>
     );
 }
 
-export default Friends;
+export default FriendsList;
