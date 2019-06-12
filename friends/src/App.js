@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+
 import Friend from './components/Friend';
 import FriendForm from './components/FriendForm';
 
@@ -19,6 +20,10 @@ class App extends Component {
     axios.get('http://localhost:5000/friends')
     .then(response => this.setState({friends: response.data}))
     .catch(err => console.log(err));
+  }
+
+  deleteFriend = () => {
+    axios.delete('http://localhost:5000/friends')
   }
 
   render() {
