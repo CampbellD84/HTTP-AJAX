@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Route, NavLink } from 'react-router-dom';
 
-import Friend from './components/Friend';
+
 import FriendsList from './components/FriendsList';
 import FriendsHome from './components/FriendsHome';
 import FriendForm from './components/FriendForm';
@@ -20,12 +19,15 @@ class App extends Component {
   // 
   componentDidMount() {
     axios.get('http://localhost:5000/friends')
-    .then(response => this.setState({friends: response.data}))
+    .then(response => this.setState({
+      friends: response.data,
+    id: response.data.id
+  }))
     .catch(err => console.log(err));
   }
 
   deleteFriend = () => {
-    axios.delete('http://localhost:5000/friends')
+    axios.delete(`http://localhost:5000/friends/$`)
     .then(res => this.setState({friends: res.data}))
   }
 
@@ -34,12 +36,14 @@ class App extends Component {
       <div className="App">
         <h1>Friends App</h1>
         <div className="friend-area">
-          <Route path="/" component={FriendsHome} />
-          <Route path="/friends" render={props => <FriendsList {...props} friends={this.state.friends}/>} />
+          <FriendsHome />
+          <FriendsList 
+            friends={this.state.friends} 
+            deleteFriend={this.deleteFriend} 
+            id={this.state.id}
+          />
         </div>
         <FriendForm friends={this.state.friends}/>
-        <Route path="/friends/:id" render={() => <Friend friends={this.props.friends}/>} />
-        <NavLink to="/friends/">Friends</NavLink>
       </div>
     );
   }
