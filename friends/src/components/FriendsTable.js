@@ -25,7 +25,6 @@ const FriendsTable = props => {
                   <td>{friend.age}</td>
                   <td>{friend.email}</td>
                   <td>
-                    <button onClick={e => props.updateFriend(e, friend)}>Edit</button>
                     <button onClick={e => props.deleteFriend(e, friend)}>Delete</button>
                   </td>
                 </tr>

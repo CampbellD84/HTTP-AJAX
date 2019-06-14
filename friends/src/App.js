@@ -21,15 +21,15 @@ class App extends Component {
   // 
   componentDidMount() {
     axios.get('http://localhost:5000/friends')
-    .then(response => this.setState({
-      friends: response.data
+    .then(res => this.setState({
+      friends: res.data
   }))
     .catch(err => console.log(err));
   }
 
   addFriend = (e, friend) => {
     e.preventDefault();
-    axios.post(`http://localhost:5000/friends/`, friend)
+    axios.post(`http://localhost:5000/friends`, friend)
     .then(res => {
       this.setState({
         friends: res.data
@@ -41,7 +41,7 @@ class App extends Component {
 
   updateFriend = (evt, friend) => {
     evt.preventDefault();
-    axios.put(`http://localhost:5000/friends/${friend.id}`)
+    axios.put(`http://localhost:5000/friends/${friend.id}`, friend)
     .then(res => {
       this.setState({
         activeFriend: null,
@@ -79,7 +79,7 @@ class App extends Component {
               See Friends
             </NavLink>
             <NavLink to="/friend-form">
-            {`${this.state.activeItem ? "Update" : "Add"} Friend`}
+            {`${this.state.activeFriend ? "Update" : "Add"} Friend`}
             </NavLink>
           </div>
         </nav>
@@ -101,7 +101,6 @@ class App extends Component {
               <FriendsTable
                 {...props}
                 friends={this.state.friends} 
-                updateFriend={this.updateFriend}
                 deleteFriend={this.deleteFriend} 
               /> 
             }

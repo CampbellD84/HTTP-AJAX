@@ -11,7 +11,7 @@ class FriendForm extends Component {
     
 
     componentDidUpdate(prevProps) {
-        if(this.props.activeFriend && prevProps.activeFriend != this.props.activeFriend) {
+        if(this.props.activeFriend && prevProps.activeFriend !== this.props.activeFriend) {
             this.setState({
                 friend: this.props.activeFriend
             });
@@ -19,28 +19,35 @@ class FriendForm extends Component {
     }
 
     handleChange = event => {
-        event.preventDefault();
-        this.setState({
-            [event.target.name]: event.target.value,
-            [event.target.age]: event.target.value,
-            [event.target.email]: event.target.value
-        });
+        event.persist();
+        let value = event.target.value;
+
+        this.setState(prevState => ({
+            friend: {
+            ...prevState.friend,
+            [event.target.name]: value
+        }
+        }));
+        // this.setState({
+        //     [event.target.name]: event.target.value,
+        //     [event.target.age]: event.target.value,
+        //     [event.target.email]: event.target.value
+        // });
     }
 
     
 
     handleSubmit = event => {
-        event.preventDefault();
-        const friend = {
-            name: this.state.name,
-            age: this.state.age,
-            email: this.state.email
-        };
         if(this.props.activeFriend) {
-            this.props.updateFriend(event, friend);
+            this.props.updateFriend(event, this.state.friend);
         } else {
-            this.props.addFriend(event, friend);
+            this.props.addFriend(event, this.state.friend);
         }
+        this.setState({
+            name: '',
+            age: '',
+            email: ''
+        });
     }
 
 
@@ -53,24 +60,24 @@ class FriendForm extends Component {
                         name="name" 
                         type="text" 
                         onChange={this.handleChange}
-                        value={this.state.name}
+                        value={this.state.friend.name}
                     />
                     <label>Age</label>
                     <input 
                         type="text" 
                         name="age" 
                         onChange={this.handleChange}
-                        value={this.state.age}
+                        value={this.state.friend.age}
                     />
                     <label>Email</label>
                     <input 
                     type="email" 
                     name="email" 
                     onChange={this.handleChange}
-                    value={this.state.email}
+                    value={this.state.friend.email}
                     />
                     <button type="submit">{`${
-            this.state.activeItem ? "Update" : "Add New"
+            this.state.activeFriend ? "Update" : "Add New"
           } Friend `}</button>
                 </form>
             </div>
