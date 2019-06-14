@@ -21,10 +21,11 @@ const FriendsTable = props => {
             {props.friends.length > 0 ? (
               props.friends.map(friend => (
                 <tr key={friend.id}>
-                  <td onClick={e => friendRoute(e, friend)} key={friend.id}>{friend.name}</td>
+                  <td>{friend.name}</td>
                   <td>{friend.age}</td>
                   <td>{friend.email}</td>
                   <td>
+                    <button onClick={e => friendRoute(e, friend)} key={friend.id}>Edit</button>
                     <button onClick={e => props.deleteFriend(e, friend)}>Delete</button>
                   </td>
                 </tr>

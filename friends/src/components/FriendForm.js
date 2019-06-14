@@ -77,7 +77,7 @@ class FriendForm extends Component {
                     value={this.state.friend.email}
                     />
                     <button type="submit">{`${
-            this.state.activeFriend ? "Update" : "Add New"
+            this.props.activeFriend ? "Update" : "Add New"
           } Friend `}</button>
                 </form>
             </div>
