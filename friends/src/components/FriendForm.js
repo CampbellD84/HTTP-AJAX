@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 class FriendForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            friends: []
+        state = {
+            friend: this.props.activeFriend || {
+                name: '',
+                age: '',
+                email: ''
+            }
+        };
+    
+
+    componentDidUpdate(prevProps) {
+        if(this.props.activeFriend && prevProps.activeFriend != this.props.activeFriend) {
+            this.setState({
+                friend: this.props.activeFriend
+            });
         }
     }
 
     handleChange = event => {
+        event.preventDefault();
         this.setState({
             [event.target.name]: event.target.value,
             [event.target.age]: event.target.value,
             [event.target.email]: event.target.value
         });
     }
+
     
 
     handleSubmit = event => {
@@ -25,10 +36,11 @@ class FriendForm extends Component {
             age: this.state.age,
             email: this.state.email
         };
-
-        axios.post(`http://localhost:5000/friends/`, {...friend})
-        .then(res => this.setState({friends: res.data}))
-        .catch(err => console.log(err));
+        if(this.props.activeFriend) {
+            this.props.updateFriend(event, friend);
+        } else {
+            this.props.addFriend(event, friend);
+        }
     }
 
 
@@ -36,19 +48,30 @@ class FriendForm extends Component {
         return (
             <div className="friend-form">
                 <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Name
-                    <input name="name" type="text" onChange={this.handleChange}/>
-                    </label>
-                    <label>
-                        Age
-                    <input type="text" name="age" onChange={this.handleChange}/>
-                    </label>
-                    <label>
-                        Email
-                    <input type="email" name="email" onChange={this.handleChange}/>
-                    </label>
-                    <button type="submit">Add Friend</button>
+                    <label>Name</label>
+                    <input 
+                        name="name" 
+                        type="text" 
+                        onChange={this.handleChange}
+                        value={this.state.name}
+                    />
+                    <label>Age</label>
+                    <input 
+                        type="text" 
+                        name="age" 
+                        onChange={this.handleChange}
+                        value={this.state.age}
+                    />
+                    <label>Email</label>
+                    <input 
+                    type="email" 
+                    name="email" 
+                    onChange={this.handleChange}
+                    value={this.state.email}
+                    />
+                    <button type="submit">{`${
+            this.state.activeItem ? "Update" : "Add New"
+          } Friend `}</button>
                 </form>
             </div>
         );
